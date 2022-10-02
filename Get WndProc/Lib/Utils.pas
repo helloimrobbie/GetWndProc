@@ -5,7 +5,7 @@ interface
 uses Windows,SysUtils,tlhelp32;
 
 Function GetHandle(TitleName : AnsiString):HWND;
-Function GetWndInfo(Hwnd : HWND):Bool;
+Function GetWndInfo(Hwnd : HWND):DWORD;
 
 implementation
 
@@ -14,15 +14,18 @@ begin
   result := FindWindowA(nil,PAnsiCHAR(TitleName));
 end;
 
-Function GetWndInfo(Hwnd : HWND):Bool;
+Function GetWndInfo(Hwnd : HWND):DWORD;
+var ret : DWORD;
 begin
  if IsWindowUnicode(Hwnd) then
  begin
-   WriteLn( Format('%x',[GetClassLongPtrA(Hwnd,GCL_WNDPROC)]) );
+   result := GetClassLongPtrA(Hwnd,GCL_WNDPROC);
  end
  else
  begin
-   WriteLn( Format('%x',[GetClassLongPtrW(Hwnd,GCL_WNDPROC)]) );
+   ret := GetClassLongPtrW(Hwnd,GCL_WNDPROC);
+   if ret = 0 then ret := GetClassLongPtrA(Hwnd,GCL_WNDPROC)
+   else result := ret;
  end;
 
 end;
