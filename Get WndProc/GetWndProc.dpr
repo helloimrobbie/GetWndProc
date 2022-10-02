@@ -23,7 +23,7 @@ begin
 
       WriteLn( Format('Hwnd : %x',[pHandle]) );
 
-      GetWndInfo(pHandle);
+      WriteLn( Format('Proc : %x',[GetWndInfo(pHandle)]) );
     end;
 
     readLn;
